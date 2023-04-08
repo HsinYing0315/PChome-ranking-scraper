@@ -2,34 +2,35 @@
 from pcconfig import config
 
 import pynecone as pc
+from .scraper import scraper_products
 
-docs_url = "https://pynecone.io/docs/getting-started/introduction"
-filename = f"{config.app_name}/{config.app_name}.py"
-
-
+options = ["3C", "周邊", "NB", "通訊", "數位", "家電", "日用", "母嬰", "食品", "生活", "居家", "休閒", "保健", "美妝", "時尚", "書店"]
 class State(pc.State):
     """The app state."""
-
-    pass
-
+    
+    option = "No Selection"
+    result: list = ['Nothing yet']
+    
+    def submit(self, option):
+        self.result = scraper_products(option)
 
 def index() -> pc.Component:
     return pc.center(
         pc.vstack(
-            pc.heading("Welcome to Pynecone!", font_size="2em"),
-            pc.box("Get started by editing ", pc.code(filename, font_size="1em")),
-            pc.link(
-                "Check out our docs!",
-                href=docs_url,
-                border="0.1em solid",
-                padding="0.5em",
-                border_radius="0.5em",
-                _hover={
-                    "color": "rgb(107,99,246)",
-                },
-            ),
-            spacing="1.5em",
-            font_size="2em",
+            pc.heading("Choose a type to see its best sells. ", font_size="2em"),
+            pc.select(options, 
+                      placeholder="Select a type", 
+                      on_change=State.set_option),
+            pc.button("Submit", 
+                      on_click=State.submit(State.option)),
+            pc.vstack(
+                pc.text(State.result[0]),
+                pc.text(State.result[1]),
+                pc.text(State.result[2]),
+                pc.text(State.result[3]),
+                pc.text(State.result[4]),
+                pc.text(State.result[5])
+            )
         ),
         padding_top="10%",
     )
