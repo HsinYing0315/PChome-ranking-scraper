@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-driver = webdriver.Chrome()
 # tags = []
     
 # def scraper_options():
@@ -17,6 +16,8 @@ driver = webdriver.Chrome()
 
 def scraper_products(chosen):
     result = []
+    
+    driver = webdriver.Chrome()
     if(chosen!="No Selection"):
         driver.get("https://24h.pchome.com.tw/")
 
